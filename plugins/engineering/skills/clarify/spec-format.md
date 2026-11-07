@@ -35,7 +35,7 @@ After answers: each question line ends with `→ yes` / `→ no: <answer>` (`rea
 - One trigger and one observable result per line; split a line that chains steps with "and then".
 - For every number in the issue (limit, timeout, count, duration), one line exactly at the boundary.
 - When the issue limits who may act, one line in which the wrong role or another company is refused.
-- At least one `(edge)` or `(error)` line. `ready_check.py` checks the headings **Goal**, **Acceptance**, **Open questions**, **For developers**, in any order.
+- At least one `(edge)` or `(error)` line (German: `(Grenze)`, `(Fehler)`). `ready_check.py` checks the headings **Goal**, **Acceptance**, **Open questions**, **For developers** (German: **Ziel**, **Akzeptanz**, **Offene Fragen**, **Für Entwickler**), in any order.
 - Cross-repo: provider first, expand before the consumer switches.
 
 ## Question checklist

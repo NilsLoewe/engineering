@@ -9,10 +9,15 @@ import json, re, sys
 
 MARKERS = ("🤖 clarify · spec", "[engineering:spec]")
 MARKER = MARKERS[0]
-SECTIONS = {"problem": "problem", "goal": "problem", "acceptance": "examples", "open questions": "questions",
-            "repos": "repos", "affected": "repos", "for developers": "repos"}
-OTHER = ("not included", "out of scope", "verification", "notes", "decisions", "nicht dabei")
-EDGE = re.compile(r"\((edge|error)\)|\b(edge|error) case\b", re.I)
+# Headings in English and German: clarify writes the spec in the issue's language.
+SECTIONS = {"problem": "problem", "goal": "problem", "ziel": "problem",
+            "acceptance": "examples", "akzeptanz": "examples",
+            "open questions": "questions", "offene fragen": "questions",
+            "repos": "repos", "affected": "repos", "for developers": "repos",
+            "für entwickler": "repos", "fuer entwickler": "repos"}
+OTHER = ("not included", "out of scope", "verification", "notes", "decisions", "nicht dabei", "nicht enthalten")
+EDGE = re.compile(r"\((edge|error|grenze|fehler)\)|\b(edge|error) case\b", re.I)
+PROPOSAL = re.compile(r"Proposal|Vorschlag")
 NONE = re.compile(r"^\s*[-*]?\s*(none|keine|n/a|—|-)?\.?\s*$", re.I)
 
 
@@ -26,7 +31,7 @@ def latest_block(text_or_json):
     return blocks[-1] if blocks else None
 
 
-HEAD = re.compile(r"^[#*\s]*(problem|goal|acceptance|open questions|repos|affected|for developers)[^:\n]{0,40}:?\**:?\s*(.*)$", re.I)
+HEAD = re.compile(r"^[#*\s]*(" + "|".join(SECTIONS) + r")[^:\n]{0,40}:?\**:?\s*(.*)$", re.I)
 OTHER_HEAD = re.compile(r"^[#*\s]*(" + "|".join(OTHER) + r")\b[^:\n]{0,40}:?\**:?", re.I)
 
 
@@ -53,9 +58,11 @@ def check(block):
     rows = [l for l in ex if l.startswith("|")]
     if rows:  # table: first row is the header
         ex = [l for l in ex if not l.startswith("|")] + rows[1:]
-    qs = [l for l in s["questions"] if not NONE.match(l) and "→" not in l]  # "→ yes" = answered
+    qs = [l for l in s["questions"] if not NONE.match(l)]
     numbered = [l for l in qs if re.match(r"^[-*]?\s*\**(Q\d+|\d+\.)", l)]
-    qs = numbered or qs  # count questions, not wrapped lines
+    # Once questions are numbered, only numbered lines count: wrapped lines and the
+    # heading's tail ("· please reply …") are not questions, even when all are answered.
+    qs = [l for l in (numbered or qs) if "→" not in l]  # "→ yes" = answered
     missing = []
     if not " ".join(s["problem"]).strip():
         missing.append("problem/value not described")
@@ -66,7 +73,7 @@ def check(block):
     chained = [i + 1 for i, l in enumerate(ex) if re.search(r"\band then\b", l, re.I)]
     if chained:
         missing.append("acceptance line(s) " + ", ".join(map(str, chained)) + " chain steps with 'and then': one trigger per line")
-    double = [l.split(".")[0].strip("*- ") for l in qs if l.split("Proposal")[0].count("?") > 1]
+    double = [l.split(".")[0].strip("*- ") for l in qs if PROPOSAL.split(l)[0].count("?") > 1]
     if double:
         missing.append("question(s) " + ", ".join(double) + " ask two things: one decision per question")
     if qs:
