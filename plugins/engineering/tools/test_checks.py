@@ -115,5 +115,47 @@ class ReadyNewFormat(unittest.TestCase):
         self.assertIn("1 open question(s)", ready_check.check(ready_check.latest_block(s)))
 
 
+DE = """🤖 clarify · spec · 07.11.2026 12:21
+
+**Spec v2** · wartet auf Nils
+
+**Befund:** Der Plan fehlt in „Heute“.
+
+**Ziel:** Nils sieht um 06:30 einen begründeten Tagesplan.
+
+**Akzeptanz**
+1. Agent läuft 06:30 → `GET /heute` liefert `plan` mit 3–5 Blöcken.
+2. (Grenze) Kalender hat 6 Blocker → Plan hat genau 5 Blöcke.
+3. (Fehler) Kalender nicht lesbar → „Heute“ zeigt „kein Plan: <Grund>“.
+
+**Nicht enthalten:** Schreiben in den Kalender.
+
+**Für Entwickler:** lifeOS zuerst, dann 10x, dann die App.
+
+**Offene Fragen an Nils** · bitte auf diesen Kommentar antworten
+1. **Was zählt N?** Vorschlag: die geparkten Items. → ja
+"""
+
+
+class ReadyGerman(unittest.TestCase):
+    def test_heading_tail_is_not_a_question_when_all_answered(self):
+        en = ("🤖 clarify · spec\n**Goal:** x.\n**Acceptance**\n1. (edge) a → b\n**For developers:** repo\n"
+              "**Open questions for Nils** · please reply to this comment\n1. **How many?** Proposal: one. → yes\n")
+        self.assertEqual(ready_check.check(ready_check.latest_block(en)), [])
+
+    def test_german_spec_is_ready(self):
+        self.assertEqual(ready_check.check(ready_check.latest_block(DE)), [])
+
+    def test_german_open_question_and_missing_edge(self):
+        s = DE.replace(" → ja", "").replace("(Grenze) ", "").replace("(Fehler) ", "")
+        m = ready_check.check(ready_check.latest_block(s))
+        self.assertIn("1 open question(s)", m)
+        self.assertTrue(any("edge or error" in x for x in m), m)
+
+    def test_german_two_decisions_in_one_question(self):
+        s = DE.replace("Was zählt N?** Vorschlag:", "Was zählt N? Und wann?** Vorschlag: x?").replace(" → ja", "")
+        self.assertTrue(any("ask two things" in x for x in ready_check.check(ready_check.latest_block(s))))
+
+
 if __name__ == "__main__":
     unittest.main()
