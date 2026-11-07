@@ -12,6 +12,7 @@ A Claude Code plugin for agent-built software that a human can trust: clarify be
 | `feedback <issue or pr>` | Reads PR review threads and issue comments together, sorts every point into bug / spec gap / other issue / style, answers in the channel it came from |
 | `review <pr>` | Fresh reviewer agents per lens, one visible GitHub review (comment only) |
 | `assess <repo>` | Read-only health assessment with a fixed raster; findings become issues in state `idea` |
+| `world new personal\|team` | Create a personal layer or a team world from the template; `add-rule`, `add-context` to maintain one |
 
 Several issues at once: `clarify a b c`, `build a b c` (plans in parallel, one approval, builds in worktrees).
 
@@ -30,6 +31,9 @@ The core knows no company. A **world overlay** is a second plugin that adds, onl
 Start one from `templates/overlay/`. A repo can override the tracker config with `.engineering.json` (`{"tracker": {...}}`).
 
 ## Install
+
+Step by step, with checks: [`docs/setup.md`](docs/setup.md). Own rules, a methods wiki, a team world: [`docs/worlds.md`](docs/worlds.md).
+
 
 ```
 claude plugin marketplace add NilsLoewe/engineering
