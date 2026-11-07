@@ -1,0 +1,6 @@
+{
+  "name": "engineering",
+  "owner": {"name": "Nils Löwe"},
+  "plugins": [{"name": "engineering", "source": "./plugins/engineering",
+               "description": "Clarify before building, build with a verifier, short PRs, feedback, review and assessment. World overlays add rules and context."}]
+}

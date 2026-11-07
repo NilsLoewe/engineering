@@ -1,0 +1,363 @@
+# Linse design: Entwurf und Code-Smells. Aus Büchern kuratiert 06.11.2026, freigegeben von Nils.
+# Quelle: docs/ai-sdlc/kuratierung-buecher-2026-11.md
+- id: design-query-without-side-effects
+  regel: A method that returns a value or ends in `?` changes no state; split a mixed one into a command and a query.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: major
+  quelle:
+  - Fowler Kap. 11
+  - Gärtner S. 113
+  - Feathers Kap. 10
+  - Ousterhout Auszug+Debatte
+  belege: 0
+  status: kandidat
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - fowler-refactoring-2e:separate-query-from-modifier
+  - gaertner-atdd:command-query-separation
+  - feathers-legacy-code:separate-command-and-query-methods
+  - ousterhout-aposd-frei:avoid-methods-with-hidden-side-effects
+- id: design-no-flag-argument
+  regel: Replace a boolean or mode argument that selects which logic a function runs with separate, intention-named functions; for React this covers functions and hooks, not props.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: minor
+  quelle:
+  - Fowler Kap. 11
+  belege: 0
+  status: kandidat
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - fowler-refactoring-2e:remove-flag-argument
+- id: design-no-repeated-type-switch
+  regel: When a `case`/`switch` or `is_a?` on the same type or kind appears a second time, move the variation into one lookup map or polymorphic type.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: major
+  quelle:
+  - Metz POODR S. 116, S. 115
+  - Fowler Kap. 10, Kap. 12
+  - Hunt/Thomas Kap. 8 S. 327
+  belege: 0
+  status: aktiv
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - metz-poodr:avoid-kind-of-or-is-a-checks
+  - metz-poodr:avoid-case-statements-switching-on-class
+  - metz-poodr:avoid-conditional-logic-on-type-attribute
+  - fowler-refactoring-2e:replace-switch-with-polymorphism-for-type-variation
+  - fowler-refactoring-2e:avoid-instanceof-in-subclass-logic
+  - hunt-thomas-pragmatic:use-lookup-tables-instead-of-conditional-chains
+- id: design-deep-not-shallow
+  regel: Do not add a wrapper, layer or helper that only forwards to another call, and do not split code into pieces that must be read together; inline them.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: major
+  quelle:
+  - Ousterhout Auszug+Debatte
+  - Metz/Owen 99B S. 24
+  - Fowler Kap. 7, Kap. 8, Kap. 6
+  belege: 0
+  status: kandidat
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - ousterhout-aposd-frei:prioritize-depth-over-length-in-functions
+  - ousterhout-aposd-frei:avoid-overly-tiny-methods
+  - ousterhout-aposd-frei:avoid-over-decomposition-through-entanglement
+  - ousterhout-aposd-frei:do-not-abstract-unnecessarily
+  - metz-owen-99-bottles:avoid-unnecessary-indirection
+  - fowler-refactoring-2e:remove-middle-man-when-delegation-is-unnecessary
+  - fowler-refactoring-2e:avoid-delegating-functions-without-need
+  - fowler-refactoring-2e:inline-function-when-body-is-clearer-than-name
+- id: design-no-mutation-of-inputs
+  regel: Do not mutate an argument, a prop, React state or a collection the caller still holds; return a new value or a copy.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: major
+  quelle:
+  - Fowler Kap. 1, Kap. 7, Kap. 6, Kap. 9
+  belege: 0
+  status: kandidat
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - fowler-refactoring-2e:avoid-mutating-arguments
+  - fowler-refactoring-2e:return-copy-of-collection-from-getter
+  - fowler-refactoring-2e:return-copy-of-data-to-prevent-mutation
+  - fowler-refactoring-2e:make-nested-objects-immutable
+  - fowler-refactoring-2e:use-immutable-data-when-possible
+- id: design-parameter-object
+  regel: When the same three or more parameters travel together through several methods, pass one value object or the whole record instead.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: minor
+  quelle:
+  - Fowler Kap. 3, Kap. 6, Kap. 11
+  - Farley MSE Kap. 9
+  belege: 0
+  status: kandidat
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - fowler-refactoring-2e:long-parameter-list
+  - fowler-refactoring-2e:introduce-parameter-object-for-data-clump
+  - fowler-refactoring-2e:pass-whole-object-instead-of-parts
+  - farley-modern-se:limit-method-parameters-to-6
+- id: design-one-home-per-fact
+  regel: Define each domain fact (limit, state list, mapping, format) once per repo and reference it; never copy its literal into a second file.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: major
+  quelle:
+  - Hunt/Thomas Kap. 2 S. 52, Kap. 2 S. 55, Kap. 3 S. 131
+  - Fowler Kap. 3, Kap. 2
+  belege: 0
+  status: aktiv
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - hunt-thomas-pragmatic:dry-principle
+  - hunt-thomas-pragmatic:avoid-duplicate-attributes
+  - hunt-thomas-pragmatic:code-generator-should-not-duplicate-logic
+  - fowler-refactoring-2e:duplicated-code
+  - fowler-refactoring-2e:eliminate-duplicate-code
+  schaerft: fe-do-not-keep-two
+- id: design-derive-dont-store
+  regel: Do not store a value that can be computed from other state (column, instance variable, `useState`); compute it where it is read.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: major
+  quelle:
+  - Hunt/Thomas Kap. 2 S. 56
+  - Fowler Kap. 9, Kap. 1
+  belege: 0
+  status: aktiv
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - hunt-thomas-pragmatic:calculate-derived-values
+  - fowler-refactoring-2e:replace-derived-variable-with-calculation
+  - fowler-refactoring-2e:replace-temp-with-query
+- id: design-one-adapter-per-dependency
+  regel: Reach a third-party library or external API only through one thin adapter that exposes the few operations this code uses.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: major
+  quelle:
+  - Farley MSE Kap. 12, Kap. 11
+  - Feathers Kap. 14, Kap. 15
+  - Hunt/Thomas Kap. 2 S. 71
+  - Vernon Kap. 4
+  belege: 0
+  status: kandidat
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - farley-modern-se:insulate-code-from-third-party-libraries
+  - farley-modern-se:use-adapter-for-external-apis
+  - farley-modern-se:minimize-api-surface-in-adapter
+  - feathers-legacy-code:wrap-external-libraries
+  - feathers-legacy-code:extract-api-calls-into-dedicated-classes
+  - hunt-thomas-pragmatic:flexible-architecture-abstract-interfaces
+  - vernon-ddd-distilled:use-anticorruption-layer-for-upstream-integration
+  schaerft: be-keep-all-calls-external
+- id: design-structure-at-the-boundary
+  regel: Convert a raw hash, JSON payload or positional array into a named Struct, Data class or type once at the boundary; do not index into it deeper inside.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: major
+  quelle:
+  - Metz POODR S. 51, S. 53
+  - Farley MSE Kap. 9, Kap. 11
+  - Fowler Kap. 7
+  belege: 0
+  status: kandidat
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - metz-poodr:avoid-direct-indexing-into-complex-data-structures
+  - metz-poodr:isolate-data-structure-logic-in-dedicated-methods
+  - farley-modern-se:ports-adapters-at-service-boundaries
+  - farley-modern-se:defend-internal-view-of-world
+  - fowler-refactoring-2e:encapsulate-record-with-class
+  - fowler-refactoring-2e:replace-primitive-with-object-class
+- id: design-inheritance-only-for-is-a
+  regel: Subclass only for a true is-a; a subclass that overrides a parent method to raise, no-op or ignore it needs composition instead.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: major
+  quelle:
+  - Metz POODR S. 142, S. 185, S. 140, S. 208
+  - Fowler Kap. 12, Kap. 3
+  - Feathers Kap. 8
+  belege: 0
+  status: kandidat
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - metz-poodr:inheritance-relationship-must-be-generalization-specializati
+  - metz-poodr:subclasses-must-not-raise-not-implemented
+  - metz-poodr:misuse-of-inheritance-with-override
+  - metz-poodr:prefer-composition-over-inheritance-for-structural-relations
+  - fowler-refactoring-2e:avoid-inheritance-when-subclass-methods-dont-apply-to-superc
+  - fowler-refactoring-2e:replace-subclass-with-delegate-for-interface-refusal
+  - feathers-legacy-code:avoid-liskov-violation-through-override
+- id: design-decide-apart-from-io
+  regel: Keep business decisions in plain methods or functions without DB, HTTP, job or rendering calls; do the I/O around them so each decision is testable alone.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: major
+  quelle:
+  - Farley MSE Kap. 11, Kap. 10
+  - Feathers Kap. 15
+  - Fowler Kap. 1
+  - Vernon Kap. 2
+  belege: 0
+  status: kandidat
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - farley-modern-se:separate-essential-accidental-complexity
+  - farley-modern-se:avoid-mixed-essential-accidental-complexity
+  - farley-modern-se:no-accidental-complexity-in-core-logic
+  - feathers-legacy-code:separate-core-logic-from-api-calls
+  - fowler-refactoring-2e:separate-calculation-from-presentation
+  - vernon-ddd-distilled:domain-model-technology-free
+- id: design-sprout-into-untested-code
+  regel: Add new behaviour to a long or untested method as a new, tested method or class that it calls, not as more lines inside it.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: major
+  quelle:
+  - Feathers Kap. 6, Kap. 20
+  belege: 0
+  status: kandidat
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - feathers-legacy-code:sprout-method-when-no-tests
+  - feathers-legacy-code:sprout-class-for-untestable-code
+  - feathers-legacy-code:test-first-for-sprouted-code
+  - feathers-legacy-code:sprout-class-when-changing
+- id: design-extract-instead-of-comment
+  regel: When a comment explains what the next block does, extract the block into a method named after the comment and delete the comment.
+  gilt_fuer:
+    stack:
+    - backend
+    - frontend
+    phase:
+    - schreiben
+    - pruefen
+  linse: design
+  stufe: linse
+  schwere: major
+  quelle:
+  - Fowler Kap. 3
+  - Metz POODR S. 56
+  - Ousterhout Auszug+Debatte
+  belege: 0
+  status: kandidat
+  herkunft: buecher-2026-11
+  kandidaten_refs:
+  - fowler-refactoring-2e:avoid-comments-as-deodorant
+  - metz-poodr:avoid-comments-by-extracting
+  - ousterhout-aposd-frei:use-descriptive-names-over-comments-for-interfaces
+  schaerft: kern-comment-why-only
+
+# Aus dem Kern hierher verschoben nach Eval Runde 2 (06.11.2026): schlug in 8 Läufen nie an, kostete 139 Bytes Kern.
+- id: design-only-what-is-asked
+  regel: 'Build only what the acceptance examples ask for: no option, flag, parameter or abstraction nobody requested.'
+  gilt_fuer:
+    stack: [backend, frontend]
+    phase: [schreiben, pruefen]
+  linse: design
+  stufe: linse
+  schwere: major
+  quelle: ['Farley MSE Kap. 6, Kap. 12', 'Metz/Owen 99B S. 32, S. 91', 'Cohn Kap. 14']
+  belege: 0
+  status: kandidat
+  herkunft: buecher-2026-11
+  schaerft: fe-do-not-add-options

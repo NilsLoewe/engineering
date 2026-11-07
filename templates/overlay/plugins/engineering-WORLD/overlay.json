@@ -1,0 +1,7 @@
+{
+  "world": "WORLD",
+  "repos": ["github\\.com[:/]ORG/"],
+  "tracker": {},
+  "rules": "rules.md",
+  "context": {"context/process.md": "before opening, reviewing or merging a PR"}
+}

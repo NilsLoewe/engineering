@@ -1,0 +1,18 @@
+{
+ "kern": "../kern.md",
+ "linsen": [
+  {
+   "name": "design",
+   "titel": "Design and code smells",
+   "stack": "beide",
+   "pfade": [
+    "app/*",
+    "lib/*",
+    "src/*"
+   ],
+   "inhalt": "^\\s*(def|class|module|function|export|case|switch)\\b|=>\\s*\\{|useState|is_a\\?|kind_of\\?|Faraday|^\\s*(#|//)",
+   "datei": "design.md",
+   "regeln": 3
+  }
+ ]
+}

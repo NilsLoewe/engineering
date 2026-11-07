@@ -1,0 +1,9 @@
+# Lenses and how a diff selects them (pfade: fnmatch globs on changed files; inhalt: regex on added lines).
+- name: design
+  titel: Design and code smells
+  stack: beide
+  pfade:
+  - app/*
+  - lib/*
+  - src/*
+  inhalt: ^\s*(def|class|module|function|export|case|switch)\b|=>\s*\{|useState|is_a\?|kind_of\?|Faraday|^\s*(#|//)
