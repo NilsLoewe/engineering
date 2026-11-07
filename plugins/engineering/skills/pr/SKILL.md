@@ -31,6 +31,7 @@ Refactoring and behaviour change go in separate commits, refactoring first with 
 1. Check the body: `python3 ${CLAUDE_PLUGIN_ROOT}/tools/pr_check.py <body.md>`. Fix until OK.
 2. `gh pr create --draft --body-file <body.md> --title "<imperative, ≤ 70 chars>"`.
 3. `python3 ${CLAUDE_PLUGIN_ROOT}/tools/tracker.py link <issue-ref> <pr-url>`, then `set-state <issue-ref> review` only when the PR leaves draft.
+4. After the PR is merged or closed, remove its worktree and a `-base` sibling: `git worktree remove <path>` per worktree, then `git worktree prune` and `git branch -D <branch>`. A worktree without a PR is removed by the session that created it.
 
 ## Code comments in the diff
 
