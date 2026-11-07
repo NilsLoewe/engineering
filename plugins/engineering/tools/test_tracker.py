@@ -145,6 +145,14 @@ class Monday(unittest.TestCase):
         self.assertEqual(json.loads(self.queries[-1][1]["v"]),
                          {"status": {"label": "Ready"}, "status_1__1": {"label": "Refined"}})
 
+    def test_config_after_the_operation(self):
+        with tempfile.TemporaryDirectory() as d:
+            ov = os.path.join(d, "o.json"); open(ov, "w").write(json.dumps({"tracker": MCFG}))
+            out = io.StringIO()
+            with mock.patch.object(tracker, "read", lambda ref, cfg: {"states": sorted(cfg["monday"]["states"])}), redirect_stdout(out):
+                tracker.main(["read", "200300400", "--config", ov])
+        self.assertIn("ready", out.getvalue())
+
     def test_monday_without_config_fails(self):
         with self.assertRaises(SystemExit):
             tracker.read("200300400", {})

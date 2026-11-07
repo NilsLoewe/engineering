@@ -25,7 +25,7 @@ Given more than one ref: spawn one general-purpose subagent per ref with the Age
    - **Owner decisions** (behaviour, scope, wording, who may do it, what is done when) → the questions at the end. Each with a proposal the owner can accept with "yes". Few and sharp; blocking ones first.
    - **Technical choices** (contract format, deploy order, class to change) → "For developers", as a proposal. The plan review in `build` approves them, not the owner.
    - Only ask what the issue, comments and code do not answer.
-5. `$T comment <ref> --key spec --body-file s.md`, then `$T set-state <ref> clarifying`, then `$T assign <ref> <owner>`: the person the questions go to (usually who wrote the issue or the PO; ask the user if unclear). No questions → do not reassign.
+5. `$T comment <ref> --key spec --body-file spec-<ref>.md`. Write it with the Write tool to a file of its own, `spec-<repo>-<number>.md` or `spec-<item-id>.md` in your scratchpad: parallel runs share the scratchpad, and a shared name posts the wrong ticket's text. Then `$T set-state <ref> clarifying`, then `$T assign <ref> <owner>`: the person the questions go to (usually who wrote the issue or the PO; ask the user if unclear). No questions → do not reassign.
 6. Tell the user in 3 lines: number of questions, the one finding that matters most, the ref. Stop. Do not implement.
 
 ## In flight (`--in-flight`, for issues already in progress, review or QA)

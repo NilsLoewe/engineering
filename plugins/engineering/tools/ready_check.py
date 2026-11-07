@@ -86,6 +86,9 @@ def main():
         sys.exit(2)
     missing = check(block)
     print("READY" if not missing else "NOT READY:\n- " + "\n- ".join(missing))
+    lines = [l for l in block.splitlines()[1:] if l.strip()]
+    if len(lines) > 20:  # budget from spec-format.md; a warning, not a gate
+        print(f"warning: the comment has {len(lines)} lines, budget is 20: shorten it")
     sys.exit(1 if missing else 0)
 
 

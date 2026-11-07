@@ -376,6 +376,10 @@ def main(argv=None):
     n.add_argument("--title", required=True)
     n.add_argument("--body-file")
     n.add_argument("--state", default="idea", choices=STATES)
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if "--config" in argv[1:]:  # also accepted after the operation: move it to the front
+        i = argv.index("--config")
+        argv = argv[i:i + 2] + argv[:i] + argv[i + 2:]
     a = ap.parse_args(argv)
     dry = a.dry_run or os.environ.get("TRACKER_DRY_RUN") == "1"
     cfg = load_config(explicit=a.config)
