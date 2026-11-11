@@ -4,7 +4,7 @@
 
 Markdown-lite only: `**bold**`, `- ` lists, `1. ` lines, blank lines. The tracker turns it into HTML (Monday) or keeps it (GitHub); numbered lines keep their visible number, so "question 3" always points somewhere. Do not write the `🤖 clarify · spec` head line; the tracker adds it.
 
-Budget: **≤ 20 lines** in total, each line ≤ 25 words, **at most 5 questions**. Details (telegrams, class names, test data) belong in the code and the PR.
+Budget: **≤ 20 lines** in total, each line ≤ 25 words. **Questions: only as many as the issue needs**; a small, clear issue has 0–2. 5 is a ceiling, not a target. More than 5 real owner decisions means the issue is too big: ask the 5 that block and propose a split under **Finding**. Details (telegrams, class names, test data) belong in the code and the PR.
 
 ```
 **Spec v1** · waiting for <owner> | READY
@@ -40,7 +40,7 @@ After answers: each question line ends with `→ yes` / `→ no: <answer>` (`rea
 
 ## Question checklist
 
-From the questions developers asked *after* starting work (analysis of 363 tickets, 11/2026). Ask only where the issue is silent, and only what the owner decides.
+From the questions developers asked *after* starting work (analysis of 363 tickets, 11/2026). Ask only where the issue is silent, and only what the owner decides. The checklist finds gaps; it is not a list to fill.
 
 1. **One or many?** (types per record, entries per item, children per parent)
 2. **Empty, missing, fallback** — what if the thing does not exist? Old records?
