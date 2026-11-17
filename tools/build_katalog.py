@@ -71,7 +71,8 @@ def build(linsen, kern, regeln, status=("aktiv",)):
         if not rs or l.get("review") == "aus":  # review: aus = nach Eval nicht im Linsen-Modus
             continue
         esk = sorted({r["eskaliert"] for r in rs if r.get("eskaliert")})
-        body = HEADER + f"# Lens: {l['titel']}\n\n" + "".join(f"Severity: {e}.\n\n" for e in esk) + "".join(
+        absicht = f"{l['absicht'].strip()}\n\n" if l.get("absicht") else ""  # the why behind the rules, for borderline cases
+        body = HEADER + f"# Lens: {l['titel']}\n\n" + absicht + "".join(f"Severity: {e}.\n\n" for e in esk) + "".join(
             f"- {r['regel']}{' (severity: ' + r['schwere'] + ')' if r.get('schwere') else ''} `[{r['id']}]`\n"
             for r in rs)
         files[f"linsen/{l['name']}.md"] = body

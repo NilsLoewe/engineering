@@ -29,6 +29,9 @@ def test():
     assert "existiert nicht" in raises(L, K, [regel(2)])
     ausgemustert = regel(3) | {"status": "ausgemustert"}
     assert "Rule 3." not in build(L, K, [regel(1), ausgemustert])["linsen/x.md"]
+    mit_absicht = [L[0] | {"absicht": "Why this lens exists."}]
+    x = build(mit_absicht, K, [regel(1)])["linsen/x.md"]
+    assert x.index("Why this lens exists.") < x.index("Rule 1.")  # Absicht steht vor den Regeln
     build(*load())  # der echte Katalog hält seine Budgets
 
 

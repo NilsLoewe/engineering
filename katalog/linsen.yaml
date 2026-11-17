@@ -1,6 +1,10 @@
 # Lenses and how a diff selects them (pfade: fnmatch globs on changed files; inhalt: regex on added lines).
 - name: design
   titel: Design and code smells
+  absicht: >-
+    Intent: every fact, state and variation has one home, so the next change touches one place.
+    A finding names the second place that a future change would have to remember; duplication that
+    exists only in a hypothetical future is not a finding.
   stack: beide
   pfade:
   - app/*
