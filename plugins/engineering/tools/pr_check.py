@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PR body check (rules 3+4): line budget, issue link, no copied spec.
+"""PR body check (rules 3+4): line budget, issue link, evidence, deploy line, no copied spec.
 
     pr_check.py [--max-lines 15] [body.md]        # stdin if no file
     gh pr view 12 --json body -q .body | pr_check.py
@@ -11,6 +11,8 @@ ISSUE_LINK = re.compile(r"github\.com/[\w.-]+/[\w.-]+/issues/\d+|monday\.com/boa
                         r"|linear\.app/\S+/issue/|(?<![\w/])([\w.-]+/[\w.-]+)?#\d+\b")
 SPEC_COPY = re.compile(r"\[engineering:spec\]|🤖 clarify · spec|^\s*[#*]*\s*(open questions|acceptance examples)\s*:", re.I | re.M)
 EVIDENCE = re.compile(r"^\s*[#*]*\s*evidence\b", re.I | re.M)
+# Deploy order was the most frequent PR-text point human reviewers still raised (SEON, 2026-11).
+DEPLOY = re.compile(r"^\s*[#*-]*\s*deploy\b[^:\n]{0,20}:", re.I | re.M)
 
 
 def check(body, max_lines=15):
@@ -22,6 +24,8 @@ def check(body, max_lines=15):
         out.append("no issue link (GitHub issue, owner/repo#n, Monday item or Linear issue)")
     if not EVIDENCE.search(body):
         out.append("no 'Evidence' section (one line per acceptance example)")
+    if not DEPLOY.search(body):
+        out.append("no 'Deploy:' line (order of migrations, flags and other repos, or 'independent')")
     if SPEC_COPY.search(body):
         out.append("body repeats the spec; link the issue instead")
     return out

@@ -9,16 +9,18 @@
 - id: kern-remove-dead-code
   regel: Remove dead code in the same change - unused methods, exports, variables, props, branches.
 - id: kern-comment-why-only
-  regel: A comment states a why, an invariant or a deliberate omission of the current code; no history, ticket numbers or other repos' internals.
+  regel: A comment states a why, an invariant or a deliberate omission of the current code; no history, ticket numbers or other repos' internals, and never longer than the code it explains.
 - id: kern-no-secrets-in-logs
   regel: Keep secrets and personal data out of logs, job arguments, error reports and the browser console.
 - id: kern-pr-text-matches-code
   regel: The PR description matches the code - behaviour, deploy order, manual steps; unrelated changes go into their own PR.
 - id: kern-check-the-other-side
-  regel: Check every cross-repo contract (field, casing, nullability, version, deploy order) in the other repo's source, not by assumption.
+  regel: For every field, parameter or signal that crosses a repo, open the other side's source at its merged or deployed ref and compare type, casing, null vs empty, ranges, version and deploy order.
 - id: kern-validate-input
   regel: Validate every request parameter and every value interpolated into a path, query or regex.
 - id: kern-honest-names
   regel: Names say what a thing is in domain terms; rename when the scope grows.
 - id: kern-query-once
   regel: Do not run the same query, request or parse twice in one path; no per-row fan-out.
+- id: kern-list-bypass-paths
+  regel: A new validation, scope or guard names every path that skips it (bulk updates, raw SQL, imports, other writers, unscoped reads) and covers or rejects each.

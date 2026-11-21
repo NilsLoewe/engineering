@@ -4,6 +4,9 @@
     review_post.py <owner/repo> <pr> <findings.json> [--dry-run]
 
 findings.json: [{"path", "line", "severity": "blocker|major|minor", "rule", "text"}]
+           or {"findings": [...], "brief": {"check": ["..."], "skip": ["..."]}}
+brief.check: what only the human reviewer can judge on this PR, with a pointer; brief.skip: what the
+reviewers verified with evidence. It ends the review body under "For the human reviewer".
 The review is always event COMMENT: the agent reports, a human decides.
 """
 import json, re, subprocess, sys
@@ -38,7 +41,18 @@ def right_lines(diff):
     return out
 
 
-def payload(findings, diff, head):
+def brief_text(brief):
+    if not brief or not (brief.get("check") or brief.get("skip")):
+        return ""
+    out = "\n\n### For the human reviewer"
+    if brief.get("check"):
+        out += "\n\nCheck yourself:\n" + "\n".join(f"- {x}" for x in brief["check"])
+    if brief.get("skip"):
+        out += "\n\nVerified by the reviewers, skip unless you doubt it:\n" + "\n".join(f"- {x}" for x in brief["skip"])
+    return out
+
+
+def payload(findings, diff, head, brief=None):
     lines = right_lines(diff)
     fs = sorted(findings, key=lambda f: (ORDER.get(f.get("severity"), 3), f.get("path", ""), f.get("line", 0)))
     inline, loose = [], []
@@ -54,16 +68,18 @@ def payload(findings, diff, head):
         body += "\n\nNot anchorable on the diff:\n" + "\n".join(loose)
     if not fs:
         body += "\n\nNo findings."
+    body += brief_text(brief)
     return {"commit_id": head, "event": "COMMENT", "body": body, "comments": inline}
 
 
 def main():
     args = [a for a in sys.argv[1:] if a != "--dry-run"]
     repo, pr, path = args
-    findings = json.load(open(path))
+    data = json.load(open(path))
+    findings, brief = (data, None) if isinstance(data, list) else (data["findings"], data.get("brief"))
     head = json.loads(sh(["gh", "pr", "view", pr, "-R", repo, "--json", "headRefOid"]))["headRefOid"]
     diff = sh(["gh", "pr", "diff", pr, "-R", repo])
-    p = payload(findings, diff, head)
+    p = payload(findings, diff, head, brief)
     if "--dry-run" in sys.argv:
         print(json.dumps(p, indent=1, ensure_ascii=False))
         return

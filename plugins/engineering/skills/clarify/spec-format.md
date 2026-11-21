@@ -53,5 +53,6 @@ From the questions developers asked *after* starting work (analysis of 363 ticke
 9. **How many, how fast** — expected volume and how long the operator may wait, as an observable result.
 10. **The need behind a prescribed solution** — the issue names a screen, field or technique: which operator problem does it solve? State that problem as the Goal.
 11. **More than one goal** — propose slices that each work end to end, one issue each.
+12. **A rule decided in review** — a review thread settled behaviour a user sees (who keeps access, what wins on conflict)? That goes back to the owner as a question; the team does not decide product rules.
 
-Interfaces between repos (field, type, format, deploy order) are not owner questions: decide them as a proposal under **For developers**.
+Interfaces between repos (field, type, format, deploy order) are not owner questions: decide them as a proposal under **For developers**, with the deploy order and, where the build relies on another system's behaviour, the version that runs in production today.

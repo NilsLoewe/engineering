@@ -31,6 +31,13 @@ class Post(unittest.TestCase):
         self.assertIn("app/a.rb:99", p["body"])
         self.assertTrue(p["body"].startswith("🤖 review · head `abcdef1` · 1 blocker, 0 major, 1 minor"))
 
+    def test_brief_ends_the_body(self):
+        brief = {"check": ["tenant: client_id comes from params"], "skip": ["digit count matches the IVR, ivr.rb:42"]}
+        body = payload([], DIFF, "abc", brief)["body"]
+        self.assertIn("### For the human reviewer\n\nCheck yourself:\n- tenant: client_id comes from params", body)
+        self.assertIn("skip unless you doubt it:\n- digit count matches the IVR", body)
+        self.assertNotIn("For the human reviewer", payload([], DIFF, "abc", {"check": [], "skip": []})["body"])
+
     def test_no_findings(self):
         self.assertIn("No findings.", payload([], DIFF, "abc")["body"])
 
