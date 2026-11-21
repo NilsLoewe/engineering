@@ -54,6 +54,7 @@ Evidence
 - AE2: not proven (no fixture)
 
 Risk: new N+1 on event list, covered by bullet gem in CI.
+Deploy: independent
 """
 
 
@@ -67,7 +68,14 @@ class PR(unittest.TestCase):
 
     def test_budget_link_evidence_spec_copy(self):
         bad = "\n".join(f"line {i}" for i in range(20)) + "\nOpen questions: none"
-        self.assertEqual(len(pr_check.check(bad)), 4)
+        self.assertEqual(len(pr_check.check(bad)), 5)
+
+    def test_deploy_line_required(self):
+        out = pr_check.check(GOOD_PR.replace("Deploy: independent\n", ""))
+        self.assertEqual(len(out), 1)
+        self.assertIn("Deploy:", out[0])
+        order = "Deploy order: migration, then seon-ui#12"
+        self.assertEqual(pr_check.check(GOOD_PR.replace("Deploy: independent", order)), [])
 
     def test_html_comments_do_not_count(self):
         body = GOOD_PR + "\n".join("<!-- template hint -->" for _ in range(20))

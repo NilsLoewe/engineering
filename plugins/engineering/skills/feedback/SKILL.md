@@ -12,7 +12,7 @@ A decision made in a review thread is lost unless it reaches the spec. QA reads 
 
 ## 1. Collect
 
-`$C <pr-ref> [<ticket-ref>] > fb.json`: every inline thread, review body and PR comment, plus the ticket comments since the PR was opened. Work on `kind: human` points; read `agent` and `bot` points only to see what is already fixed. A review body counts point by point, not as one item. Also read the spec comment (`🤖 clarify · spec`) and the code on the PR branch.
+`$C <pr-ref> [<ticket-ref>] > fb.json`: every inline thread, review body and PR comment, plus the ticket comments since the PR was opened. Work on `kind: human` points; read `agent` and `bot` points only to see what is already fixed. Exception: an agent finding on the head of category correctness or security that is still open counts as a human point, whatever its severity; in SEON 36% of human review points were such open agent findings (2026-11). A review body counts point by point, not as one item. Also read the spec comment (`🤖 clarify · spec`) and the code on the PR branch.
 
 ## 2. Classify
 

@@ -9,7 +9,7 @@ argument-hint: <issue-ref> [<issue-ref> ...]
 No Ready, no code. `$T` = `python3 ${CLAUDE_PLUGIN_ROOT}/tools/tracker.py`. Add `--config <file>` when a world overlay in your context names an engineering tracker config.
 
 1. `$T read <ref> | python3 ${CLAUDE_PLUGIN_ROOT}/tools/ready_check.py`. Not READY → stop, report what is missing, offer `clarify`. Do not work around it.
-2. Enter plan mode. The plan names, per acceptance line of the spec comment (line 1 = AE1, ...), the test that will prove it. Cross-repo: the provider's contract change is step one, each consumer after it.
+2. Enter plan mode. The plan names, per acceptance line of the spec comment (line 1 = AE1, ...), the test that will prove it. Cross-repo: the provider's contract change is step one, each consumer after it. For every value that crosses a repo (field, parameter, digit count, flag, status code), the plan cites the other side's file:line at its default branch, and for behaviour you rely on, which deployed version provides it; a guard that waits for a value nobody sends yet is dead code. For every new validation or scope, the plan lists the paths that skip it.
 3. After the plan is approved: `$T set-state <ref> in-progress`, then implement on a branch. Write the tests for the examples first.
    - Bug fix: run the new spec against the unfixed code and keep the failing output before you apply the fix.
    - A spec fails and you think it failed before your change: run it on the base branch and keep that failure. Without it, your change caused it.

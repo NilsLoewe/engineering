@@ -20,9 +20,12 @@ Evidence
 - AE2: not proven — <why>    # copy the verifier's verdicts, never upgrade them
 
 Risk: <what could break, where; or "low: <reason>">
+Deploy: <order of migration, backfill, flag and other repos' PRs; or "independent">
 ```
 
 No spec, no file list, no changelog of review rounds, no tool chatter.
+
+`Deploy:` names what must ship first: a provider route or column the code calls, a migration old processes must survive, a backfill. Check the provider is deployed, not only merged.
 
 Refactoring and behaviour change go in separate commits, refactoring first with green tests; the body names both in one line each.
 

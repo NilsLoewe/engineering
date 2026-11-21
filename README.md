@@ -8,9 +8,9 @@ A Claude Code plugin for agent-built software that a human can trust: clarify be
 |---|---|
 | `clarify <issue>` | Reads the issue, its links and the code; keeps **one** living comment with finding, goal, numbered acceptance examples and at most 5 questions for the owner; hands the issue to the owner. `--in-flight` writes the spec for work already in progress |
 | `build <issue>` | Only on Ready. Plan per acceptance example, tests first, then the `verifier` agent, then `pr` |
-| `pr` | Draft PR, at most 15 lines, evidence per example, link to the issue |
+| `pr` | Draft PR, at most 15 lines, evidence per example, deploy order, link to the issue |
 | `feedback <issue or pr>` | Reads PR review threads and issue comments together, sorts every point into bug / spec gap / other issue / style, answers in the channel it came from |
-| `review <pr>` | Fresh reviewer agents per lens, one visible GitHub review (comment only) |
+| `review <pr>` | Fresh reviewer agents per lens, one visible GitHub review (comment only) that ends with a brief for the human reviewer: what only a person can judge, what was verified |
 | `assess <repo>` | Read-only health assessment with a fixed raster; findings become issues in state `idea` |
 | `world new personal\|team` | Create a personal layer or a team world from the template; `add-rule`, `add-context` to maintain one |
 
