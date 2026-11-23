@@ -1,6 +1,6 @@
 ---
 name: feedback
-description: Work through review feedback (PR threads, review bodies) and QA feedback (ticket comments) for one PR and its ticket. Sorts every human point into bug, spec gap, out of scope or style, acts per class, answers in the channel the point came from with what now applies, and keeps the ticket's spec the one place where decisions live. Use for "handle the review", "address feedback on <pr>", "QA asked questions on <ticket>", or when a PR sits in CHANGES_REQUESTED.
+description: Work through review feedback (PR threads, review bodies) and QA feedback (ticket comments) for one PR and its ticket. Sorts every human point and every open agent finding into bug, spec gap, out of scope or style, acts per class, answers in the channel the point came from with what now applies, and keeps the ticket's spec the one place where decisions live. Use for "handle the review", "address feedback on <pr>", "QA asked questions on <ticket>", or when a PR sits in CHANGES_REQUESTED.
 argument-hint: <pr-ref> [<ticket-ref>] [--dry-run]
 ---
 
@@ -12,7 +12,7 @@ A decision made in a review thread is lost unless it reaches the spec. QA reads 
 
 ## 1. Collect
 
-`$C <pr-ref> [<ticket-ref>] > fb.json`: every inline thread, review body and PR comment, plus the ticket comments since the PR was opened. Work on `kind: human` points; read `agent` and `bot` points only to see what is already fixed. Exception: an agent finding on the head of category correctness or security that is still open counts as a human point, whatever its severity; in SEON 36% of human review points were such open agent findings (2026-11). A review body counts point by point, not as one item. Also read the spec comment (`🤖 clarify · spec`) and the code on the PR branch.
+`$C <pr-ref> [<ticket-ref>] > fb.json`: every inline thread, review body and PR comment, plus the ticket comments since the PR was opened. Work on `kind: human` points and on every open `kind: agent` thread, whatever its severity or category; read `bot` points only to see what is already fixed. An agent finding is not optional because it is minor: fix it, or answer in its thread in one sentence why not (not a defect, not this ticket with the ticket ref, deliberate). Minor may stay unfixed, never unanswered. Reason: in SEON the agent had already raised 36% of the human review points, left them open as minor, and the human reviewer spent the review repeating them (2026-11). Agent findings in a review body without a thread count only when the body lists them as open. A review body counts point by point, not as one item. Also read the spec comment (`🤖 clarify · spec`) and the code on the PR branch.
 
 ## 2. Classify
 

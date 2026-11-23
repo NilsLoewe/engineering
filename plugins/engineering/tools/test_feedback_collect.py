@@ -56,6 +56,7 @@ class Collect(unittest.TestCase):
         self.assertEqual((human["kind"], human["open"], human["replies"][0]["body"][:8]), ("human", False, "Fixed in"))
         self.assertEqual([t["kind"] for t in out["threads"]], ["agent", "human", "bot"])
         self.assertTrue(out["threads"][2]["open"])  # nobody answered Copilot
+        self.assertTrue(out["threads"][0]["open"])  # agent finding posted under the author's account, unanswered
 
     def test_reviews_without_body_dropped(self):
         out = self.run_collect("https://github.com/o/r/pull/9")

@@ -8,7 +8,8 @@
 Output: pr, threads (inline review threads, oldest first), reviews (with a body), pr_comments,
 ticket (with only the comments written since the PR was opened). Every comment carries `kind`:
 human, agent (body starts with 🤖, posted under a human account) or bot. A thread is `open`
-when its last comment is not from the PR author.
+when its last comment is not from the PR author or is an agent finding (the agent posts under
+the author's account, so an unanswered finding is still open).
 """
 import json, os, re, sys
 
@@ -52,7 +53,7 @@ def collect(pr_ref, ticket_ref=None, read=tracker.read):
         first = cs[0]
         threads.append({"id": root, "url": first["html_url"], "path": first["path"],
                         "line": first.get("line") or first.get("original_line"), **note(first),
-                        "open": cs[-1]["user"]["login"] != author, "replies": [note(c) for c in cs[1:]]})
+                        "open": cs[-1]["user"]["login"] != author or kind(cs[-1]["user"]["login"], cs[-1].get("body") or "") == "agent", "replies": [note(c) for c in cs[1:]]})
     threads.sort(key=lambda t: t["created_at"])
 
     reviews = [{**note(r), "state": r["state"], "url": r["html_url"]} for r in api(f"{base}/pulls/{n}/reviews") if r.get("body")]
