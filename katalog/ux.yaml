@@ -1,0 +1,131 @@
+# Linse ux: Oberfläche, für jede Software mit Interface. Verallgemeinert aus den SEON-Linsen
+# fe-ux-feedback, fe-ux-orientierung, fe-ux-steuerung und fe-styles (23.11.2026, Nils).
+# Diese Regeln sind Buchregeln ohne Review-Belege; fe-ux-feedback und fe-ux-orientierung fanden
+# im Replay-Eval SEON Treffer, die der allgemeine Review übersah (pragmatic-programmer,
+# docs/ai-sdlc/eval-linsen-2026-11.md). Eine Welt mit eigener UX-Linse ersetzt diese über `ersetzt: ux`.
+- id: ux-async-feedback
+  regel: Every user-triggered async action shows visible feedback within 400 ms, blocks a second submit while pending and reports success or failure; a click that changes nothing visible is a bug.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: major
+  quelle_welt: fe-every-user-triggered-async
+- id: ux-four-states
+  regel: Every list, table and detail view handles loading, empty (says why, offers the way out, shows the active search and filters), error (what failed, what to do, retry) and data.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: major
+  quelle_welt: [fe-every-list-table-detail, fe-search-filter-returns-nothing, fe-avoid-dead-ends-keep]
+- id: ux-errors-stay
+  regel: An error the user must read does not disappear on its own; success and routine news never open a modal dialog.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: major
+  quelle_welt: [fe-errors-alerts-must-not, fe-do-not-report-success-2]
+- id: ux-end-of-flow
+  regel: The end of a flow states the outcome (what was saved or sent, where it is now) and offers the next step.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: minor
+  quelle_welt: fe-end-flow-states-outcome
+- id: ux-like-the-siblings
+  regel: Solve a known interaction (filters, row actions, dialogs, save/cancel) with the same component, wording, position and order as the existing screens, and name the screen you followed.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: minor
+  quelle_welt: fe-solve-known-interaction-way
+- id: ux-not-colour-alone
+  regel: Never carry meaning (status, priority, validation error) by colour alone; add text or an icon.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: minor
+  quelle_welt: fe-never-use-colour-only
+- id: ux-domain-words
+  regel: Texts the user reads use domain language, never enum keys, HTTP codes or model names; a button is verb plus object; every number carries its unit.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: minor
+  quelle_welt: [fe-texts-user-reads-labels, fe-every-number-carries-unit]
+- id: ux-context-in-dialog
+  regel: A dialog shows the object it acts on by name, not only an id; filters, sorting, page and form input survive navigating away and back.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: minor
+  quelle_welt: fe-do-not-make-users
+- id: ux-one-primary-action
+  regel: One primary action per dialog or form; a destructive action uses the destructive style, never the primary one, and never sits directly beside a frequent action.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: minor
+  quelle_welt: [fe-one-primary-action-per, fe-click-targets-least-24]
+- id: ux-confirm-only-irreversible
+  regel: An irreversible action needs a confirmation that names the object and the action, or an undo; a recoverable routine action gets no confirmation.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: major
+  quelle_welt: [fe-irreversible-actions-delete-cancel, fe-ask-confirmation-only-actions]
+- id: ux-forgiving-input
+  regel: Accept input as people type it (spaces, dashes, decimal comma, surrounding whitespace), prevent invalid input with bounded controls, and keep the input after a failed submit.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: minor
+  quelle_welt: [fe-accept-input-forms-people, fe-values-must-valid-ids]
+- id: ux-disabled-says-why
+  regel: A disabled control says why it is disabled, next to it or in a tooltip.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: minor
+  quelle_welt: fe-disabled-control-says-why
+- id: ux-accessible-controls
+  regel: Icon-only buttons have an accessible name; click targets are at least 24x24 px; links navigate and buttons act.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: minor
+  quelle_welt: [fe-icon-only-buttons-need, fe-click-targets-least-24, fe-use-links-navigation-buttons]
+- id: ux-design-tokens
+  regel: Colours, spacing and font sizes come from the app's design tokens or theme; no hard-coded values and no token marked deprecated.
+  linse: ux
+  stufe: linse
+  status: aktiv
+  belege: 0
+  herkunft: seon-ux-2026-11
+  schwere: minor
+  quelle_welt: [fe-use-semantic-lovable-aligned, fe-use-theme-space-key, fe-use-theme-typography-fontsize]
