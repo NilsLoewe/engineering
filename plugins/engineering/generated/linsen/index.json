@@ -13,6 +13,23 @@
    "inhalt": "^\\s*(def|class|module|function|export|case|switch)\\b|=>\\s*\\{|useState|is_a\\?|kind_of\\?|Faraday|^\\s*(#|//)",
    "datei": "design.md",
    "regeln": 3
+  },
+  {
+   "name": "ux",
+   "titel": "UX: states, feedback, controls and wording",
+   "stack": "frontend",
+   "pfade": [
+    "*.tsx",
+    "*.jsx",
+    "*.vue",
+    "*.svelte",
+    "*.erb",
+    "*.heex",
+    "*.html"
+   ],
+   "inhalt": "<[A-Za-z]",
+   "datei": "ux.md",
+   "regeln": 14
   }
  ]
 }

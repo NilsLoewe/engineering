@@ -20,8 +20,11 @@ Evidence
 - AE2: not proven — <why>    # copy the verifier's verdicts, never upgrade them
 
 Risk: <what could break, where; or "low: <reason>">
+Screens: <UI change only: one screenshot link per changed state>
 Deploy: <order of migration, backfill, flag and other repos' PRs; or "independent">
 ```
+
+`Screens:` only when the diff changes what a user sees. A screenshot shows the states, not proof of usability; the evidence lines still name the test or the walk-through.
 
 No spec, no file list, no changelog of review rounds, no tool chatter.
 

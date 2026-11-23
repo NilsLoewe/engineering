@@ -20,6 +20,8 @@ Several issues at once: `clarify a b c`, `build a b c` (plans in parallel, one a
 
 Core rules (`katalog/kern.yaml`, built into `plugins/engineering/generated/kern.md`) are loaded into every session and subagent inside a git repo. A hook asks before an edit removes assertions or skips tests.
 
+Lenses (`katalog/linsen.yaml`) are short rule lists that `review` picks by the changed files: `design` (code smells) and `ux` (states, feedback, controls and wording for every app with an interface). A world lens with `ersetzt: <core lens>` takes that lens's place in its repos.
+
 ## Worlds
 
 The core knows no company. A **world overlay** is a second plugin that adds, only in its own repos (matched by `git remote`):

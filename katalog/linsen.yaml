@@ -11,3 +11,19 @@
   - lib/*
   - src/*
   inhalt: ^\s*(def|class|module|function|export|case|switch)\b|=>\s*\{|useState|is_a\?|kind_of\?|Faraday|^\s*(#|//)
+- name: ux
+  titel: 'UX: states, feedback, controls and wording'
+  absicht: >-
+    Intent: a user always knows what the screen shows, what just happened and what to do next.
+    A finding names the user, the moment and what they miss or misread; a matter of taste is not a finding.
+    Missing outcome, error or empty state is major; layout and wording are minor.
+  stack: frontend
+  pfade:
+  - '*.tsx'
+  - '*.jsx'
+  - '*.vue'
+  - '*.svelte'
+  - '*.erb'
+  - '*.heex'
+  - '*.html'
+  inhalt: <[A-Za-z]

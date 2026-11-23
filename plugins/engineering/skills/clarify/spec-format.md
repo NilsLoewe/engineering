@@ -48,7 +48,7 @@ From the questions developers asked *after* starting work (analysis of 363 ticke
 4. **Who may do it** — role, tenant, company.
 5. **Final list or wording** — is it final, who confirms it?
 6. **Existing data and rollout** — backfill? feature flag?
-7. **What the user sees on failure.**
+7. **What the user sees** on failure, while loading and when there is nothing to show — for a screen, one acceptance line each for the empty and the error state.
 8. **How to accept it** — test data, environment, who accepts.
 9. **How many, how fast** — expected volume and how long the operator may wait, as an observable result.
 10. **The need behind a prescribed solution** — the issue names a screen, field or technique: which operator problem does it solve? State that problem as the Goal.

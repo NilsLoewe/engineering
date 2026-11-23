@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Selbsttest für build_katalog.py: python3 tools/test_build_katalog.py"""
+import json
+
 from build_katalog import build, load, LINSE_MAX_REGELN
 
 L = [{"name": "x", "titel": "X", "stack": "backend", "pfade": ["app/*"]}]
@@ -32,6 +34,8 @@ def test():
     mit_absicht = [L[0] | {"absicht": "Why this lens exists."}]
     x = build(mit_absicht, K, [regel(1)])["linsen/x.md"]
     assert x.index("Why this lens exists.") < x.index("Rule 1.")  # Absicht steht vor den Regeln
+    ersetzend = [L[0] | {"ersetzt": "ux"}]
+    assert json.loads(build(ersetzend, K, [regel(1)])["linsen/index.json"])["linsen"][0]["ersetzt"] == "ux"
     build(*load())  # der echte Katalog hält seine Budgets
 
 

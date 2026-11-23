@@ -76,7 +76,7 @@ def build(linsen, kern, regeln, status=("aktiv",)):
             f"- {r['regel']}{' (severity: ' + r['schwere'] + ')' if r.get('schwere') else ''} `[{r['id']}]`\n"
             for r in rs)
         files[f"linsen/{l['name']}.md"] = body
-        index["linsen"].append({k: l[k] for k in ("name", "titel", "stack", "pfade", "inhalt") if k in l}
+        index["linsen"].append({k: l[k] for k in ("name", "titel", "stack", "pfade", "inhalt", "ersetzt") if k in l}
                                | {"datei": f"{l['name']}.md", "regeln": len(rs)})
     files["linsen/index.json"] = json.dumps(index, indent=1, ensure_ascii=False) + "\n"
     if errs:
