@@ -7,7 +7,7 @@ A Claude Code plugin for agent-built software that a human can trust: clarify be
 | Skill | Does |
 |---|---|
 | `clarify <issue>` | Reads the issue, its links and the code; keeps **one** living comment with finding, goal, numbered acceptance examples and at most 5 questions for the owner; hands the issue to the owner. `--in-flight` writes the spec for work already in progress |
-| `build <issue>` | Only on Ready. Plan per acceptance example, tests first, then the `verifier` agent, then `pr` |
+| `build <issue>` | Only on Ready. Reads the lenses for the files it will touch, plans per acceptance example, tests first, then the `verifier` agent, then `pr` |
 | `pr` | Draft PR, at most 15 lines, evidence per example, deploy order, link to the issue |
 | `feedback <issue or pr>` | Reads PR review threads and issue comments together, sorts every point into bug / spec gap / other issue / style, answers in the channel it came from |
 | `review <pr>` | Fresh reviewer agents per lens, one visible GitHub review (comment only) that ends with a brief for the human reviewer: what only a person can judge, what was verified |
@@ -20,7 +20,7 @@ Several issues at once: `clarify a b c`, `build a b c` (plans in parallel, one a
 
 Core rules (`katalog/kern.yaml`, built into `plugins/engineering/generated/kern.md`) are loaded into every session and subagent inside a git repo. A hook asks before an edit removes assertions or skips tests.
 
-Lenses (`katalog/linsen.yaml`) are short rule lists that `review` picks by the changed files: `design` (code smells) and `ux` (states, feedback, controls and wording for every app with an interface). A world lens with `ersetzt: <core lens>` takes that lens's place in its repos.
+Lenses (`katalog/linsen.yaml`) are short rule lists that `review` picks by the changed files: `design` (code smells) and `ux` (states, feedback, controls and wording for every app with an interface). A world lens with `ersetzt: <core lens>` takes that lens's place in its repos. `build` reads the matching lenses before it plans, including those a world marks `review: aus` (kept for writing, not run in review).
 
 ## Worlds
 

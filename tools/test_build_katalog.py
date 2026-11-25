@@ -36,6 +36,9 @@ def test():
     assert x.index("Why this lens exists.") < x.index("Rule 1.")  # Absicht steht vor den Regeln
     ersetzend = [L[0] | {"ersetzt": "ux"}]
     assert json.loads(build(ersetzend, K, [regel(1)])["linsen/index.json"])["linsen"][0]["ersetzt"] == "ux"
+    nur_bauen = json.loads(build([L[0] | {"review": "aus"}], K, [regel(1)])["linsen/index.json"])["linsen"]
+    assert nur_bauen[0]["review"] is False  # bleibt im Index, damit build sie liest; review überspringt sie
+    assert "review" not in json.loads(build(L, K, [regel(1)])["linsen/index.json"])["linsen"][0]
     build(*load())  # der echte Katalog hält seine Budgets
 
 
