@@ -14,7 +14,7 @@ No Ready, no code. `$T` = `python3 ${CLAUDE_PLUGIN_ROOT}/tools/tracker.py`. Add 
 4. After the plan is approved: `$T set-state <ref> in-progress`, then implement on a branch. Write the tests for the examples first.
    - Bug fix: run the new spec against the unfixed code and keep the failing output before you apply the fix.
    - A spec fails and you think it failed before your change: run it on the base branch and keep that failure. Without it, your change caused it.
-   - UI change: open every changed screen in a browser and go through its states (loading, empty, error, data). A browser you start headless is Chrome Beta or Playwright's own Chromium, never the user's Chrome, and you close it afterwards. Keep one screenshot per changed state for the PR; the recorded walk-through is the evidence for acceptance lines a test cannot reach.
+   - UI change (a changed file matches the globs of lens `ux`): run skill `engineering:ui-check change <local url>` before the verifier. Mandatory: its report is the evidence for every acceptance line a user sees and no test asserts, and the PR cannot leave draft without its `Screens:` line (a hook denies `gh pr ready`).
 5. Spawn the `verifier` agent with: the spec block, the branch/base, the test command. You wrote the code, so you do not judge it (rule 5).
 6. Any example "not proven" or "contradicted" → fix and verify again, or report the gap. Never mark it proven yourself.
 7. Then run the `pr` skill.

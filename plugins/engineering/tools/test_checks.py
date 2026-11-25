@@ -78,6 +78,9 @@ class PR(unittest.TestCase):
         self.assertEqual(pr_check.check(GOOD_PR.replace("Deploy: independent", order)), [])
 
     def test_html_comments_do_not_count(self):
+        self.assertEqual(pr_check.check(GOOD_PR, ui=True)[0][:9], "UI change")
+        self.assertEqual(pr_check.check(GOOD_PR + "Screens: Kontakte: leer, Fehler\n", ui=True), [])
+        self.assertEqual(pr_check.check(GOOD_PR + "Screens:\n", ui=True)[0][:9], "UI change")  # empty line is no answer
         body = GOOD_PR + "\n".join("<!-- template hint -->" for _ in range(20))
         self.assertEqual(pr_check.check(body), [])
 

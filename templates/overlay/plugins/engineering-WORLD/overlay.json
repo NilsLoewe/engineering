@@ -7,6 +7,10 @@
   "invariants": "invariants.md",
   "rules": "rules.md",
   "context": {
-    "context/process.md": "before opening, reviewing or merging a PR"
+    "context/process.md": "before opening, reviewing or merging a PR",
+    "context/browser.md": "before ui-check"
+  },
+  "browser": {
+    "never": []
   }
 }

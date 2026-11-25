@@ -20,11 +20,11 @@ Evidence
 - AE2: not proven — <why>    # copy the verifier's verdicts, never upgrade them
 
 Risk: <what could break, where; or "low: <reason>">
-Screens: <UI change only: one screenshot link per changed state>
+Screens: <UI change only: line from ui-check, or "n/a: <why nothing visible changed>">
 Deploy: <order of migration, backfill, flag and other repos' PRs; or "independent">
 ```
 
-`Screens:` only when the diff changes what a user sees. A screenshot shows the states, not proof of usability; the evidence lines still name the test or the walk-through.
+`Screens:` is required when the diff changes a file of lens `ux`; a hook denies `gh pr ready` (and `gh pr create` without `--draft`) without it. Take the line from the `ui-check` report. A screenshot shows the states, not proof of usability; the evidence lines still name the test or the walk-through.
 
 No spec, no file list, no changelog of review rounds, no tool chatter.
 
@@ -34,7 +34,7 @@ Refactoring and behaviour change go in separate commits, refactoring first with 
 
 ## Steps
 
-1. Check the body: `python3 ${CLAUDE_PLUGIN_ROOT}/tools/pr_check.py <body.md>`. Fix until OK.
+1. Check the body: `python3 ${CLAUDE_PLUGIN_ROOT}/tools/pr_check.py [--ui] <body.md>` (`--ui` when the diff changes a file of lens `ux`). Fix until OK.
 2. `gh pr create --draft --body-file <body.md> --title "<imperative, ≤ 70 chars>"`.
 3. `python3 ${CLAUDE_PLUGIN_ROOT}/tools/tracker.py link <issue-ref> <pr-url>`, then `set-state <issue-ref> review` only when the PR leaves draft.
 
