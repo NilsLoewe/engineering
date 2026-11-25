@@ -68,7 +68,7 @@ def build(linsen, kern, regeln, status=("aktiv",)):
         rs = sorted((r for r in aktiv if r["linse"] == l["name"]), key=lambda r: -r.get("belege", 0))
         if len(rs) > LINSE_MAX_REGELN:
             errs.append(f"Linse {l['name']}: {len(rs)} Regeln > Budget {LINSE_MAX_REGELN}")
-        if not rs or l.get("review") == "aus":  # review: aus = nach Eval nicht im Linsen-Modus
+        if not rs:
             continue
         esk = sorted({r["eskaliert"] for r in rs if r.get("eskaliert")})
         absicht = f"{l['absicht'].strip()}\n\n" if l.get("absicht") else ""  # the why behind the rules, for borderline cases
@@ -76,8 +76,10 @@ def build(linsen, kern, regeln, status=("aktiv",)):
             f"- {r['regel']}{' (severity: ' + r['schwere'] + ')' if r.get('schwere') else ''} `[{r['id']}]`\n"
             for r in rs)
         files[f"linsen/{l['name']}.md"] = body
+        # review: aus = after an eval not run as a review lens; build still reads it before writing code.
         index["linsen"].append({k: l[k] for k in ("name", "titel", "stack", "pfade", "inhalt", "ersetzt") if k in l}
-                               | {"datei": f"{l['name']}.md", "regeln": len(rs)})
+                               | {"datei": f"{l['name']}.md", "regeln": len(rs)}
+                               | ({"review": False} if l.get("review") == "aus" else {}))
     files["linsen/index.json"] = json.dumps(index, indent=1, ensure_ascii=False) + "\n"
     if errs:
         raise ValueError("\n".join(errs))
