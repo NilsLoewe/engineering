@@ -11,6 +11,7 @@ A Claude Code plugin for agent-built software that a human can trust: clarify be
 | `pr` | Draft PR, at most 15 lines, evidence per example, deploy order, link to the issue |
 | `feedback <issue or pr>` | Reads PR review threads and issue comments together, sorts every point into bug / spec gap / other issue / style, answers in the channel it came from |
 | `review <pr>` | Fresh reviewer agents per lens, one visible GitHub review (comment only) that ends with a brief for the human reviewer: what only a person can judge, what was verified |
+| `ui-check change\|explore <url>` | Walks the UI in Chrome Beta via the chrome-devtools MCP: `change` goes through every changed screen's states and writes the evidence for verifier and PR (mandatory in `build` for UI changes); `explore` plays a persona through everyday tasks and files friction as issues. Never production |
 | `assess <repo>` | Read-only health assessment with a fixed raster; findings become issues in state `idea` |
 | `world new personal\|team` | Create a personal layer or a team world from the template; `add-rule`, `add-context` to maintain one |
 
@@ -18,7 +19,7 @@ Several issues at once: `clarify a b c`, `build a b c` (plans in parallel, one a
 
 ## Rules
 
-Core rules (`katalog/kern.yaml`, built into `plugins/engineering/generated/kern.md`) are loaded into every session and subagent inside a git repo. A hook asks before an edit removes assertions or skips tests.
+Core rules (`katalog/kern.yaml`, built into `plugins/engineering/generated/kern.md`) are loaded into every session and subagent inside a git repo. A hook asks before an edit removes assertions or skips tests. A second hook denies starting the user's Google Chrome headless or with a debugging port, opening a host the world lists under `browser.never`, and a UI PR leaving draft without a `Screens:` line.
 
 Lenses (`katalog/linsen.yaml`) are short rule lists that `review` picks by the changed files: `design` (code smells) and `ux` (states, feedback, controls and wording for every app with an interface). A world lens with `ersetzt: <core lens>` takes that lens's place in its repos. `build` reads the matching lenses before it plans, including those a world marks `review: aus` (kept for writing, not run in review).
 

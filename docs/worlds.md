@@ -38,6 +38,12 @@ Keep the invariants few: if everything is an invariant, nothing is. Everything o
 
 `UPDATES.md` says, newest first, what changed for the people working in the world and why. Write an entry with every version bump; it is the page a teammate reads after `claude plugin update`.
 
+## Browser checks (skill ui-check)
+
+A world with an interface adds two things:
+- `overlay.json`: `"browser": {"never": ["^app\\.example\\.com$"]}`, regexes on the production hosts. A hook denies the chrome-devtools MCP these hosts in the world's repos. A single repo can set the same key in `.engineering.json`.
+- `context/browser.md`, registered in `"context"` with "before ui-check": targets (local URL and how to start it, staging URL, health path), where login credentials live, test personas and seed, the flow catalogue for explore, issue repo and the blocker and backlog labels, calibration cases.
+
 ## Many worlds in one overlay
 
 An overlay can hold several worlds, one folder each, for example one per client: `plugins/<overlay>/kunden/<name>/overlay.json` with its own `invariants.md`, `rules.md`, `UPDATES.md` and `context/`. The hook prints every world whose `repos` match. A new world is a copied folder; nothing needs to be installed again. Keep a template folder whose `"repos"` is `[]`, so it never matches.

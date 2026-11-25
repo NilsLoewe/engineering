@@ -19,6 +19,15 @@
             "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/tools/hook_test_weakening.py\""
           }
         ]
+      },
+      {
+        "matcher": "Bash|mcp__chrome-devtools__navigate_page|mcp__chrome-devtools__new_page",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/tools/hook_browser.py\""
+          }
+        ]
       }
     ],
     "SubagentStart": [

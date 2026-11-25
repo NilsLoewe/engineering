@@ -12,7 +12,7 @@ Input: the spec comment (`🤖 clarify · spec`; older issues: `[engineering:spe
 2. For each acceptance example (AE1, AE2, ...):
    - find the test that exercises exactly this Given/When/Then (name, file:line);
    - run it (or the narrowest command that includes it) and keep the relevant output line;
-   - if no test exists, check whether a recorded manual step in the diff or the issue proves it.
+   - if no test exists, check whether a recorded manual step in the diff or the issue proves it. An example a user sees in the UI without a test that asserts it: proven only by a `ui-check` report line (`tmp/ui-check-*/report.md`) with steps and observed result; otherwise "not proven".
 3. Run the full test command once if given; report failures outside the examples separately.
 4. Check the diff for changes the spec does not cover (scope creep) and for examples the code contradicts.
 5. Bug fix: is there output of the new spec failing on the unfixed code? A claim "failed before" needs a run on the base branch. Missing → "not proven".

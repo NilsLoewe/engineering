@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """PR body check (rules 3+4): line budget, issue link, evidence, deploy line, no copied spec.
 
-    pr_check.py [--max-lines 15] [body.md]        # stdin if no file
+    pr_check.py [--max-lines 15] [--ui] [body.md]        # stdin if no file
     gh pr view 12 --json body -q .body | pr_check.py
 Exit 0 = ok, 1 = findings printed.
 """
@@ -13,9 +13,11 @@ SPEC_COPY = re.compile(r"\[engineering:spec\]|🤖 clarify · spec|^\s*[#*]*\s*(
 EVIDENCE = re.compile(r"^\s*[#*]*\s*evidence\b", re.I | re.M)
 # Deploy order was the most frequent PR-text point human reviewers still raised (SEON, 2026-11).
 DEPLOY = re.compile(r"^\s*[#*-]*\s*deploy\b[^:\n]{0,20}:", re.I | re.M)
+# A UI PR names the screens and states it walked through (skill ui-check); hook_browser enforces it at ready.
+SCREENS = re.compile(r"^\s*[#*-]*\s*screens\s*:\s*\S", re.I | re.M)
 
 
-def check(body, max_lines=15):
+def check(body, max_lines=15, ui=False):
     lines = [l for l in body.splitlines() if l.strip() and not l.strip().startswith("<!--")]
     out = []
     if len(lines) > max_lines:
@@ -26,6 +28,8 @@ def check(body, max_lines=15):
         out.append("no 'Evidence' section (one line per acceptance example)")
     if not DEPLOY.search(body):
         out.append("no 'Deploy:' line (order of migrations, flags and other repos, or 'independent')")
+    if ui and not SCREENS.search(body):
+        out.append("UI change without a 'Screens:' line (skill ui-check; or 'Screens: n/a: <why>')")
     if SPEC_COPY.search(body):
         out.append("body repeats the spec; link the issue instead")
     return out
@@ -35,9 +39,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("file", nargs="?")
     ap.add_argument("--max-lines", type=int, default=15)
+    ap.add_argument("--ui", action="store_true", help="the diff changes files of the ux lens")
     a = ap.parse_args()
     body = open(a.file).read() if a.file else sys.stdin.read()
-    out = check(body, a.max_lines)
+    out = check(body, a.max_lines, a.ui)
     print("OK" if not out else "\n".join(f"- {x}" for x in out))
     sys.exit(1 if out else 0)
 
