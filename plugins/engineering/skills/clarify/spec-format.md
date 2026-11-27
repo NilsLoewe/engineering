@@ -1,15 +1,13 @@
 # The clarify comment
 
-**One comment per issue**, edited in place on every run (`--key spec`). It reads top to bottom for the owner: what we found and what will be built, then the questions. Answers come as replies to this comment.
+**One comment per issue**, edited in place on every run (`--key spec`). It reads top to bottom for the owner and QA: what will be built and how to accept it first, then what we found, then the questions. Answers come as replies to this comment.
 
 Markdown-lite only: `**bold**`, `- ` lists, `1. ` lines, blank lines. The tracker turns it into HTML (Monday) or keeps it (GitHub); numbered lines keep their visible number, so "question 3" always points somewhere. Do not write the `🤖 clarify · spec` head line; the tracker adds it.
 
-Budget: **≤ 20 lines** in total, each line ≤ 25 words. **Questions: only as many as the issue needs**; a small, clear issue has 0–2. 5 is a ceiling, not a target. More than 5 real owner decisions means the issue is too big: ask the 5 that block and propose a split under **Finding**. Details (telegrams, class names, test data) belong in the code and the PR.
+Budget: **≤ 20 lines and ≤ 250 words** in total, each line ≤ 25 words. In SEON the agent's tickets ran about five times longer than the PO's and the team could not find the acceptance lines (retro 2026-11); `ready_check.py` warns above both budgets. **Questions: only as many as the issue needs**; a small, clear issue has 0–2. 5 is a ceiling, not a target. More than 5 real owner decisions means the issue is too big: ask the 5 that block and propose a split under **Finding**. Details (telegrams, class names, test data) belong in the code and the PR.
 
 ```
 **Spec v1** · waiting for <owner> | READY
-
-**Finding:** <the one thing the owner must know, 1-2 sentences; omit if nothing surprising>
 
 **Goal:** <who gets what, 1-2 sentences>
 
@@ -17,6 +15,8 @@ Budget: **≤ 20 lines** in total, each line ≤ 25 words. **Questions: only as 
 1. <situation> → <observable result>
 2. (edge) <situation> → <result>
 3. (error) <situation> → <result>
+
+**Finding:** <the one thing the owner must know, 1-2 sentences; omit if nothing surprising>
 
 **Not included:** <scope cuts, or "nothing">
 
@@ -30,6 +30,8 @@ Budget: **≤ 20 lines** in total, each line ≤ 25 words. **Questions: only as 
 One question = one decision with one proposal, so "4 yes" settles it. Two decisions are two questions; never join them with "and" or a second question mark.
 Acceptance and questions are numbered separately; an acceptance line that depends on a question names it: `… (per question 2)`. No questions: `**Open questions:** none`.
 After answers: each question line ends with `→ yes` / `→ no: <answer>` (`ready_check.py` counts lines without `→` as open), the head line says `Spec v2`.
+
+**Approval and owner** (only when the world's tracker config has `ready.approvers` or `ready.owner_column`): the last question is always `**Acceptance 1–<n> as written: approved?** Proposal: yes.`, addressed to an approver. When that person answers yes in the ticket, add the line `Acceptance approved by <name>, <date>` under **Acceptance**; `ready_check.py --config` checks that the line exists and that the person commented. A changed acceptance line after approval removes the line and asks again. The owner column needs a person other than the agent account; the agent never decides open product questions as an "assumption": an assumption is a question with a proposal.
 
 - Concrete values (IDs, labels, texts) from the issue where they exist.
 - One trigger and one observable result per line; split a line that chains steps with "and then".

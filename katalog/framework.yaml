@@ -1,0 +1,59 @@
+# Linse framework: Framework- und Sprach-Idiom zur gepinnten Version. Abgeleitet aus dem Context7-Test
+# (pragmatic-programmer, docs/ai-sdlc/befunde/retro-2026-11-26.md, 27.11.2026): 10 SEON-PRs, zwei Arme.
+# Die Funde dort hatten weder Menschen noch der Review-Agent gemeldet. belege = gefundene echte Fälle.
+- id: fw-result-not-mutated
+  regel: A call that returns a new object (Rails params.permit, merge, frozen or immutable values, map) is used through its result; a mutation of a fresh copy that the next call throws away is a bug.
+  linse: framework
+  stufe: linse
+  status: aktiv
+  belege: 1
+  herkunft: context7-test-2026-11
+  schwere: major
+- id: fw-bounds-fit-column
+  regel: A validated number or string fits its database column (integer upper bound, string length); otherwise the database raises and the API answers 500 instead of 422.
+  linse: framework
+  stufe: linse
+  status: aktiv
+  belege: 1
+  herkunft: context7-test-2026-11
+  schwere: major
+- id: fw-pinned-version
+  regel: Judge every API at the version in the lockfile; an API deprecated or removed at that version is a finding with the version named, a newer API the pinned version lacks is a bug.
+  linse: framework
+  stufe: linse
+  status: aktiv
+  belege: 1
+  herkunft: context7-test-2026-11
+  schwere: minor
+- id: fw-effect-deps-match
+  regel: A React effect, memo or callback lists exactly what its body reads; no unused and no missing dependency, and an intended exception says why in a comment.
+  linse: framework
+  stufe: linse
+  status: aktiv
+  belege: 1
+  herkunft: context7-test-2026-11
+  schwere: minor
+- id: fw-render-pure
+  regel: Render bodies and useMemo stay pure (no randomness, no side effects); a value that must stay stable across renders lives in state or a ref.
+  linse: framework
+  stufe: linse
+  status: aktiv
+  belege: 1
+  herkunft: context7-test-2026-11
+  schwere: minor
+- id: fw-test-lifecycle
+  regel: Test setup runs inside the test framework's lifecycle (render and renderHook inside a test or a before hook, never at module scope while tests are collected).
+  linse: framework
+  stufe: linse
+  status: aktiv
+  belege: 1
+  herkunft: context7-test-2026-11
+  schwere: minor
+- id: fw-use-framework-helper
+  regel: Where the pinned framework has a helper for what the diff hand-rolls (response.parsed_body, have_http_status, normalizes), use it, unless a comment says why not.
+  linse: framework
+  stufe: linse
+  status: aktiv
+  belege: 1
+  herkunft: context7-test-2026-11
+  schwere: minor
