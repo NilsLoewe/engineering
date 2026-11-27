@@ -58,6 +58,33 @@ Deploy: independent
 """
 
 
+class People(unittest.TestCase):
+    RC = {"owner_column": "driver", "owner_label": "Driver", "owner_not": ["Nils Löwe"], "approvers": ["Sony"]}
+    OK_SPEC = SPEC + "Acceptance approved by Sony, 2026-11-28\n"
+
+    def issue(self, driver, spec, author="Sony"):
+        return json.dumps({"body": "", "columns": {"driver": driver},
+                           "comments": [{"author": "Nils Löwe", "body": spec}, {"author": author, "body": "1 yes"}]})
+
+    def test_human_driver_and_approval(self):
+        src = self.issue("Vic Carrasco", self.OK_SPEC)
+        self.assertEqual(ready_check.check_people(src, self.OK_SPEC, self.RC), [])
+
+    def test_agent_account_is_no_driver(self):
+        src = self.issue("Nils Löwe", self.OK_SPEC)
+        self.assertEqual(ready_check.check_people(src, self.OK_SPEC, self.RC)[0][:15], "no human Driver")
+        self.assertEqual(len(ready_check.check_people(self.issue("", self.OK_SPEC), self.OK_SPEC, self.RC)), 1)
+
+    def test_approval_needs_the_approvers_reply(self):
+        self.assertTrue(ready_check.check_people(self.issue("Vic", SPEC), SPEC, self.RC)[0].startswith("acceptance not"))
+        # the agent wrote the line, but Sony never commented
+        src = self.issue("Vic", self.OK_SPEC, author="Nils Löwe")
+        self.assertTrue(ready_check.check_people(src, self.OK_SPEC, self.RC)[0].startswith("acceptance not"))
+
+    def test_no_config_no_people_check(self):
+        self.assertEqual(ready_check.check_people(self.issue("", SPEC), SPEC, {}), [])
+
+
 class PR(unittest.TestCase):
     def test_good(self):
         self.assertEqual(pr_check.check(GOOD_PR), [])
@@ -83,6 +110,21 @@ class PR(unittest.TestCase):
         self.assertEqual(pr_check.check(GOOD_PR + "Screens:\n", ui=True)[0][:9], "UI change")  # empty line is no answer
         body = GOOD_PR + "\n".join("<!-- template hint -->" for _ in range(20))
         self.assertEqual(pr_check.check(body), [])
+
+    # seon-ui's template (shortened): agent PRs used the plugin format instead and lost "Screenshots" (2026-11).
+    TEMPLATE = ("## Links\n\n- Task:\n\n---\n\n## Description\n\n<!-- purpose -->\n\n## Test Cases\n\n-\n\n"
+                "## Screenshots\n\n| Before | After |\n|--------|-------|\n\n"
+                "## Release Notes\n\n<!-- Remove this if not applicable. -->\n")
+
+    def test_template_sections_required(self):
+        out = pr_check.check(GOOD_PR, template=self.TEMPLATE)
+        self.assertEqual(out, ["repo PR template section(s) missing: Links, Description, Test Cases, Screenshots"])
+
+    def test_filled_template_passes_and_frame_is_free(self):
+        body = ("## Links\n\n- Task: Closes o/r#7\n\n---\n\n## Description\n\nAdds intervention times.\n\n"
+                "## Test Cases\n\nEvidence\n- AE1: spec/a_spec.rb:4 passes\n\n"
+                "## Screenshots\n\n| Before | After |\n|--------|-------|\n| a | b |\n\nDeploy: independent\n")
+        self.assertEqual(pr_check.check(body, max_lines=7, template=self.TEMPLATE), [])
 
 
 NEW = """🤖 clarify · spec · 06.11.2026 18:00

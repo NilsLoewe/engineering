@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 """Ready check (rule 1) against the latest `[engineering:spec]` block.
 
-    tracker.py read <ref> | ready_check.py      # or: ready_check.py spec.md
+    tracker.py read <ref> | ready_check.py [--config <overlay.json>]     # or: ready_check.py spec.md
 Exit 0 = ready, 1 = not ready (missing criteria listed), 2 = no spec block.
 Format: skills/clarify/spec-format.md
+
+A world can require people, not only text (tracker config "ready", SEON retro 2026-11: 49 of 81 agent
+tickets had no human but the CTO, the driver column was filled on 6 of 165):
+  "ready": {"owner_column": "<column id>", "owner_label": "Driver", "owner_not": ["<agent account>"],
+            "approvers": ["<PO name>"]}
+owner_column needs the tracker JSON (Monday columns); approvers need the line
+"Acceptance approved by <name>" in the spec and, with tracker JSON, a comment by that person.
 """
-import json, re, sys
+import json, os, re, sys
 
 MARKERS = ("🤖 clarify · spec", "[engineering:spec]")
 MARKER = MARKERS[0]
@@ -83,19 +90,57 @@ def check(block):
     return missing
 
 
+APPROVED = re.compile(r"(?:acceptance approved by|akzeptanz freigegeben von)\W*([^,\n*(]+)", re.I)
+
+
+def check_people(src, block, rcfg):
+    """Missing human owner or acceptance approval, per the world's "ready" config."""
+    try:
+        issue = json.loads(src)
+    except ValueError:
+        issue = {}
+    out = []
+    col = rcfg.get("owner_column")
+    if col and "columns" in issue:
+        names = [n.strip() for n in (issue["columns"].get(col) or "").split(",") if n.strip()]
+        if not [n for n in names if n not in rcfg.get("owner_not", [])]:
+            out.append(f"no human {rcfg.get('owner_label', col)}: set a person who owns the ticket (not the agent account)")
+    approvers = rcfg.get("approvers") or []
+    if approvers:
+        who = [m.strip() for m in APPROVED.findall(block)]
+        ok = [w for w in who if w in approvers]
+        if ok and "comments" in issue:  # the approval must come from the approver, not from the agent's word
+            ok = [w for w in ok if any(c.get("author") == w for c in issue["comments"])]
+        if not ok:
+            out.append(f"acceptance not approved by {' or '.join(approvers)} (line 'Acceptance approved by <name>, <date>' after their reply)")
+    return out
+
+
+def ready_config(argv):
+    if "--config" not in argv:
+        return {}, argv
+    i = argv.index("--config")
+    path, rest = argv[i + 1], argv[:i] + argv[i + 2:]
+    return json.load(open(os.path.expanduser(path))).get("tracker", {}).get("ready", {}), rest
+
+
 def main():
     if sys.argv[1:2] in (["-h"], ["--help"]):
         sys.exit(print(__doc__))
-    src = open(sys.argv[1]).read() if len(sys.argv) > 1 else sys.stdin.read()
+    rcfg, args = ready_config(sys.argv[1:])
+    src = open(args[0]).read() if args else sys.stdin.read()
     block = latest_block(src)
     if block is None:
         print(f"NOT READY: no {MARKER} block found. Run clarify first.")
         sys.exit(2)
-    missing = check(block)
+    missing = check(block) + check_people(src, block, rcfg)
     print("READY" if not missing else "NOT READY:\n- " + "\n- ".join(missing))
     lines = [l for l in block.splitlines()[1:] if l.strip()]
     if len(lines) > 20:  # budget from spec-format.md; a warning, not a gate
         print(f"warning: the comment has {len(lines)} lines, budget is 20: shorten it")
+    words = len(block.split())
+    if words > 250:  # retro 2026-11: agent tickets ran ~5x longer than the PO's, the team could not find the ACs
+        print(f"warning: the comment has {words} words, budget is 250: shorten it")
     sys.exit(1 if missing else 0)
 
 

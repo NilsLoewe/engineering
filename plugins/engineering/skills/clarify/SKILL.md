@@ -25,7 +25,7 @@ Given more than one ref: spawn one general-purpose subagent per ref with the Age
    - **Owner decisions** (behaviour, scope, wording, who may do it, what is done when) → the questions at the end. Each with a proposal the owner can accept with "yes". Blocking ones first. Before writing, drop every question whose answer would not change an acceptance line; the count follows from the issue, never from the budget.
    - **Technical choices** (contract format, deploy order, class to change) → "For developers", as a proposal. The plan review in `build` approves them, not the owner.
    - Only ask what the issue, comments and code do not answer.
-5. `$T comment <ref> --key spec --body-file spec-<ref>.md`. Write it with the Write tool to a file of its own, `spec-<repo>-<number>.md` or `spec-<item-id>.md` in your scratchpad: parallel runs share the scratchpad, and a shared name posts the wrong ticket's text. Then `$T set-state <ref> clarifying`, then `$T assign <ref> <owner>`: the person the questions go to (usually who wrote the issue or the PO; ask the user if unclear). No questions → do not reassign.
+5. `$T comment <ref> --key spec --body-file spec-<ref>.md`. Write it with the Write tool to a file of its own, `spec-<repo>-<number>.md` or `spec-<item-id>.md` in your scratchpad: parallel runs share the scratchpad, and a shared name posts the wrong ticket's text. Then `$T set-state <ref> clarifying`, then `$T assign <ref> <owner>`: the person the questions go to (usually who wrote the issue or the PO; ask the user if unclear). No questions → do not reassign. When the world names an owner column (`ready.owner_column`) and it holds no person other than the agent account, ask the user who drives the ticket; never fill it with the agent account.
 6. Tell the user in 3 lines: number of questions, the one finding that matters most, the ref. Stop. Do not implement.
 
 ## In flight (`--in-flight`, for issues already in progress, review or QA)
@@ -46,7 +46,7 @@ Re-read the issue, its links and the code from scratch, even when you remember t
 
 1. `$T read <ref>`. Answers are the replies to the clarify comment (`reply_to` = its id) and any later comment by the owner.
 2. Edit the comment: fold each answer into goal and acceptance, append it to its question (`→ yes`, `→ no: …`), bump the version. An unclear answer stays open; do not resolve it yourself.
-3. `$T read <ref> | python3 ${CLAUDE_PLUGIN_ROOT}/tools/ready_check.py`.
+3. `$T read <ref> | python3 ${CLAUDE_PLUGIN_ROOT}/tools/ready_check.py [--config <file>]` (the same config as `$T`: it carries the world's `ready` rules for owner and approval).
 4. READY → tell the user; `$T set-state <ref> ready` only if the user is the owner and says so. NOT READY → list what is missing and `$T assign` the issue back to whoever must answer.
 
 Your own proposal is never an answer, even when the user says "answer them yourself". Write `→ proposal taken over by <user>, <date>` on the question and keep any question the owner or the acceptor must decide (acceptance, wording, limits you made up) open for them. A number or limit you chose yourself is a question, not a fact.

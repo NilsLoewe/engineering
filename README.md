@@ -8,9 +8,9 @@ A Claude Code plugin for agent-built software that a human can trust: clarify be
 |---|---|
 | `clarify <issue>` | Reads the issue, its links and the code; keeps **one** living comment with finding, goal, numbered acceptance examples and at most 5 questions for the owner; hands the issue to the owner. `--in-flight` writes the spec for work already in progress |
 | `build <issue>` | Only on Ready. Reads the lenses for the files it will touch, plans per acceptance example, tests first, then the `verifier` agent, then `pr` |
-| `pr` | Draft PR, at most 15 lines, evidence per example, deploy order, link to the issue |
+| `pr` | Draft PR that fills the repo's PR template when there is one; at most 15 content lines, evidence per example, deploy order, link to the issue |
 | `feedback <issue or pr>` | Reads PR review threads and issue comments together, sorts every point into bug / spec gap / other issue / style, answers in the channel it came from |
-| `review <pr>` | Fresh reviewer agents per lens, one visible GitHub review (comment only) that ends with a brief for the human reviewer: what only a person can judge, what was verified |
+| `review <pr>` | Fresh reviewer agents per lens, one visible GitHub review per head (comment only): blocker and major as threads, at most 5 minor folded into the body, then a brief for the human reviewer: what only a person can judge, what was verified |
 | `ui-check change\|explore <url>` | Walks the UI in Chrome Beta via the chrome-devtools MCP: `change` goes through every changed screen's states and writes the evidence for verifier and PR (mandatory in `build` for UI changes); `explore` plays a persona through everyday tasks and files friction as issues. Never production |
 | `assess <repo>` | Read-only health assessment with a fixed raster; findings become issues in state `idea` |
 | `world new personal\|team` | Create a personal layer or a team world from the template; `add-rule`, `add-context` to maintain one |
@@ -21,7 +21,15 @@ Several issues at once: `clarify a b c`, `build a b c` (plans in parallel, one a
 
 Core rules (`katalog/kern.yaml`, built into `plugins/engineering/generated/kern.md`) are loaded into every session and subagent inside a git repo. A hook asks before an edit removes assertions or skips tests. A second hook denies starting the user's Google Chrome headless or with a debugging port, opening a host the world lists under `browser.never`, and a UI PR leaving draft without a `Screens:` line.
 
-Lenses (`katalog/linsen.yaml`) are short rule lists that `review` picks by the changed files: `design` (code smells) and `ux` (states, feedback, controls and wording for every app with an interface). A world lens with `ersetzt: <core lens>` takes that lens's place in its repos. `build` reads the matching lenses before it plans, including those a world marks `review: aus` (kept for writing, not run in review).
+Lenses (`katalog/linsen.yaml`) are short rule lists that `review` picks by the changed files: `design` (code smells), `ux` (states, feedback, controls and wording for every app with an interface) and `framework` (APIs judged at the versions in the lockfile). A world lens with `ersetzt: <core lens>` takes that lens's place in its repos. `build` reads the matching lenses before it plans, including those a world marks `review: aus` (kept for writing, not run in review).
+
+## Ready needs people, not only text
+
+A world can require a human owner and an approval of the acceptance lines before Ready (`tracker.ready` in its overlay: `owner_column`, `owner_not`, `approvers`). `ready_check.py --config <overlay.json>` then checks the owner column and the line `Acceptance approved by <name>, <date>` against a comment by that person.
+
+## Measuring the review agent
+
+`tools/review_stats.py <owner/repo> --since <date>` counts per rule how agent findings ended: fixed, changed under the thread, dismissed (`not a defect`, `not this ticket`, `deliberate`) or open. `feedback` answers with these tags. A rule that is mostly dismissed is a candidate for removal. On PRs an agent wrote, "fixed" measures compliance more than value.
 
 ## Worlds
 

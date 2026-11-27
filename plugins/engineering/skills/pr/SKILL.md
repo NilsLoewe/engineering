@@ -28,13 +28,28 @@ Deploy: <order of migration, backfill, flag and other repos' PRs; or "independen
 
 No spec, no file list, no changelog of review rounds, no tool chatter.
 
+## The repo's PR template wins
+
+Look for it first: `.github/pull_request_template.md`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/PULL_REQUEST_TEMPLATE/*.md`, `docs/pull_request_template.md`, `pull_request_template.md` (on the base branch: `git show origin/<base>:<path>`). If one exists, the body **is that template, filled**: keep its headings in order, delete its `<!-- -->` hints, and put the lines above into the matching sections instead of the block format:
+
+| Template section (typical names) | Gets |
+|---|---|
+| Links / Ticket / Task | `Closes <issue link>` |
+| Description / Summary | what and why, 1-3 sentences |
+| Changes / What changed | 1-3 bullets on behaviour, not a file list |
+| Test Cases / Testing | `Evidence`, then one line per acceptance example |
+| Screenshots | the `Screens:` line; image links only where the world names a host for them (a local `tmp/` path is not a screenshot) |
+| Reviewer notes / Notes | `Risk:` and `Deploy:` (no such section: put them under the description) |
+
+A section the template marks optional ("delete if none", "remove this if not applicable") goes when empty; every other section stays, with `n/a: <why>` if there is nothing to say. Never answer a frontend template with backend headings or the plugin block: reviewers read their template, and in SEON agent UI PRs lost the Screenshots section that way (0 of 20, 2026-11). The budget counts content lines only; headings, `---` and table separators are free.
+
 `Deploy:` names what must ship first: a provider route or column the code calls, a migration old processes must survive, a backfill. Check the provider is deployed, not only merged.
 
 Refactoring and behaviour change go in separate commits, refactoring first with green tests; the body names both in one line each.
 
 ## Steps
 
-1. Check the body: `python3 ${CLAUDE_PLUGIN_ROOT}/tools/pr_check.py [--ui] <body.md>` (`--ui` when the diff changes a file of lens `ux`). Fix until OK.
+1. Check the body: `python3 ${CLAUDE_PLUGIN_ROOT}/tools/pr_check.py [--ui] [--template <template.md>] <body.md>` (`--ui` when the diff changes a file of lens `ux`; `--template` with the repo template you found). Fix until OK.
 2. `gh pr create --draft --body-file <body.md> --title "<imperative, ≤ 70 chars>"`.
 3. `python3 ${CLAUDE_PLUGIN_ROOT}/tools/tracker.py link <issue-ref> <pr-url>`, then `set-state <issue-ref> review` only when the PR leaves draft.
 

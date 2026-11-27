@@ -30,6 +30,26 @@
    "inhalt": "<[A-Za-z]",
    "datei": "ux.md",
    "regeln": 14
+  },
+  {
+   "name": "framework",
+   "titel": "Framework and language idiom at the pinned versions",
+   "stack": "beide",
+   "pfade": [
+    "*.rb",
+    "*.py",
+    "*.ts",
+    "*.tsx",
+    "*.js",
+    "*.jsx",
+    "*.ex",
+    "*.exs",
+    "*.go",
+    "*.kt",
+    "*.php"
+   ],
+   "datei": "framework.md",
+   "regeln": 7
   }
  ]
 }

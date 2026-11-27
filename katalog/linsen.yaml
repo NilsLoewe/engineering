@@ -27,3 +27,23 @@
   - '*.heex'
   - '*.html'
   inhalt: <[A-Za-z]
+- name: framework
+  titel: Framework and language idiom at the pinned versions
+  absicht: >-
+    Intent: the code uses its framework the way it works at the versions in the lockfile, not the newest docs.
+    A finding names the API, the pinned version and what it does there; unsure about an API, look it up for
+    that version (Context7 or the installed gem/package source) before you report. Taste is not a finding.
+    Something a linter can catch belongs in the linter config: name the rule instead of repeating it per PR.
+  stack: beide
+  pfade:
+  - '*.rb'
+  - '*.py'
+  - '*.ts'
+  - '*.tsx'
+  - '*.js'
+  - '*.jsx'
+  - '*.ex'
+  - '*.exs'
+  - '*.go'
+  - '*.kt'
+  - '*.php'

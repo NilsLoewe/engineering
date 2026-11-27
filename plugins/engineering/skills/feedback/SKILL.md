@@ -12,7 +12,7 @@ A decision made in a review thread is lost unless it reaches the spec. QA reads 
 
 ## 1. Collect
 
-`$C <pr-ref> [<ticket-ref>] > fb.json`: every inline thread, review body and PR comment, plus the ticket comments since the PR was opened. Work on `kind: human` points and on every open `kind: agent` thread, whatever its severity or category; read `bot` points only to see what is already fixed. An agent finding is not optional because it is minor: fix it, or answer in its thread in one sentence why not (not a defect, not this ticket with the ticket ref, deliberate). Minor may stay unfixed, never unanswered. Reason: in SEON the agent had already raised 36% of the human review points, left them open as minor, and the human reviewer spent the review repeating them (2026-11). Agent findings in a review body without a thread count only when the body lists them as open. A review body counts point by point, not as one item. Also read the spec comment (`🤖 clarify · spec`) and the code on the PR branch.
+`$C <pr-ref> [<ticket-ref>] > fb.json`: every inline thread, review body and PR comment, plus the ticket comments since the PR was opened. Work on `kind: human` points and on every open `kind: agent` thread, whatever its severity or category; read `bot` points only to see what is already fixed. An agent finding is not optional because it is minor: fix it, or answer in its thread in one sentence why not (not a defect, not this ticket with the ticket ref, deliberate). Minor may stay unfixed, never unanswered. Reason: in SEON the agent had already raised 36% of the human review points, left them open as minor, and the human reviewer spent the review repeating them (2026-11). Agent findings in a review body without a thread count only when the body lists them as open; the folded minor list of the latest agent review is open, and gets one PR comment that answers it point by point. A review body counts point by point, not as one item. Also read the spec comment (`🤖 clarify · spec`) and the code on the PR branch.
 
 ## 2. Classify
 
@@ -39,6 +39,7 @@ A point that is both a bug and a decision is **b**: the decision comes first. De
 The answer says **what applies now** and **the commit**, in one to three sentences. "Fixed in abc123" alone does not count.
 
 - GitHub point → reply in its thread. Ticket point → reply to that comment in the ticket.
+- **An agent finding's answer starts with its outcome tag**, so the precision of each rule can be counted (`review_stats.py`): `fixed in <sha>:`, `not a defect:`, `not this ticket:` (with the ticket ref), `deliberate:`. One tag, then the sentence. A rule that is mostly `not a defect` loses its place in the catalog.
 - Never copy a discussion into the other system. The spec comment gets the decision, not the thread.
 - Each spec edit adds one line at the end: `**Changes since v<N>:** <what changed, 1 line, with commit or thread link>`.
 - A status update in the ticket names what changed for QA, not "all findings fixed, CI green".
